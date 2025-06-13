@@ -1,12 +1,13 @@
 // Firebase configuration object
 // Replace the placeholder values below with your Firebase project details
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY_HERE",
-  authDomain: "YOUR_AUTH_DOMAIN_HERE",
-  projectId: "YOUR_PROJECT_ID_HERE",
-  storageBucket: "YOUR_STORAGE_BUCKET_HERE",
-  messagingSenderId: "YOUR_MESSAGING_SENDER_ID_HERE",
-  appId: "YOUR_APP_ID_HERE"
+  apiKey: "AIzaSyCBCaoEDDBZIqw5Ns1vdZHhjpaG-5ydWbM",
+  authDomain: "to-do-list-eb464.firebaseapp.com",
+  projectId: "to-do-list-eb464",
+  storageBucket: "to-do-list-eb464.firebasestorage.app",
+  messagingSenderId: "1093389675888",
+  appId: "1:1093389675888:web:1169559f87bf4acc10f3b5",
+  measurementId: "G-HH2DL6KW36"
 };
 
 // Initialize Firebase
