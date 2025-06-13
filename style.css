@@ -41,12 +41,14 @@ body {
 }
 
 .app-logo {
-  font-weight: 800;
-  font-size: 1.75rem;
-  color: #81d8f7; /* light blue accent */
-  letter-spacing: 1.3px;
+  font-family: 'Dancing Script', cursive;
+  font-weight: 700;
+  font-size: 2.5rem;
+  color: #81d8f7;
+  letter-spacing: 1px;
   margin: 0;
 }
+
 
 /* AUTH CONTAINER */
 .auth-container {
