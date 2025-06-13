@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Advanced To-Do List App with Firebase</title>
+  <!-- Google Fonts: Inter -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <!-- Material Icons -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <style>
+    /* Reset & base */
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: #0d1117;
+      color: #c9d1d9;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      padding: 16px;
+    }
+
+    a {
+      color: #58a6ff;
+      text-decoration: none;
+    }
+    a:hover, a:focus {
+      text-decoration: underline;
+    }
+
+    /* Container */
+    .app-container {
+      width: 100%;
+      max-width: 960px;
+      background: #161b22;
+      border-radius: 12px;
+      box-shadow:
+        0 2px 8px rgb(10 10 10 / 0.5),
+        0 0 8px rgb(88 166 255 / 0.15);
+      padding: 24px 32px 48px;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    /* Header */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #30363d;
+    }
+    header h1 {
+      font-weight: 700;
+      font-size: 1.75rem;
+      color: #58a6ff;
+      user-select: none;
+    }
+
+    /* Auth forms */
+    .auth-section {
+      max-width: 400px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    .auth-section form {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      background: #21262d;
+      padding: 24px 32px;
+      border-radius: 12px;
+      box-shadow: 0 0 6px rgb(88 166 255 / 0.3);
+    }
+    .auth-section label {
+      font-weight: 600;
+      font-size: 0.875rem;
+      margin-bottom: 4px;
+      color: #8b949e;
+      user-select: none;
+    }
+    .auth-section input[type="email"],
+    .auth-section input[type="password"] {
+      padding: 12px 16px;
+      border-radius: 8px;
+      border: 1px solid #30363d;
+      background: #0d1117;
+      color: #c9d1d9;
+      font-size: 1rem;
+      font-weight: 400;
+      transition: border-color 0.2s ease;
+    }
+    .auth-section input[type="email"]:focus,
+    .auth-section input[type="password"]:focus {
+      outline: none;
+      border-color: #58a6ff;
+      box-shadow: 0 0 6px #58a6ff80;
+    }
+    .auth-section button {
+      background: #238636;
+      border: none;
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-weight: 700;
+      font-size: 1rem;
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      user-select: none;
+    }
+    .auth-section button:hover,
+    .auth-section button:focus {
+      background: #2ea043;
+      outline: none;
+    }
+    .auth-toggle {
+      text-align: center;
+      font-size: 0.9rem;
+      color: #8b949e;
+      user-select: none;
+    }
+    .auth-toggle a {
+      cursor: pointer;
+      font-weight: 600;
+      color: #58a6ff;
+    }
+    .auth-toggle a:hover,
+    .auth-toggle a:focus {
+      text-decoration: underline;
+    }
+    .error-message {
+      color: #f85149;
+      font-size: 0.9rem;
+      font-weight: 700;
+      user-select: none;
+    }
+
+    /* Main app UI */
+    #app-main {
+      display: none;
+      flex-direction: column;
+      gap: 24px;
+    }
+    #user-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #8b949e;
+    }
+    #user-info span {
+      font-weight: 600;
+      font-size: 1rem;
+    }
+    #logout-btn {
+      background: transparent;
+      border: 1.5px solid #8b949e;
+      border-radius: 8px;
+      padding: 6px 16px;
+      font-weight: 600;
+      color: #8b949e;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      user-select: none;
+    }
+    #logout-btn:hover,
+    #logout-btn:focus {
+      background: #8b949e;
+      color: #161b22;
+      outline: none;
+    }
+
+    /* Task input */
+    #new-task-form {
+      display: flex;
+      gap: 12px;
+    }
+    #new-task-input {
+      flex-grow: 1;
+      padding: 12px 16px;
+      border-radius: 12px;
+      border: 1px solid #30363d;
+      background: #0d1117;
+      color: #c9d1d9;
+      font-size: 1rem;
+      font-weight: 400;
+      transition: border-color 0.2s ease;
+    }
+    #new-task-input:focus {
+      outline: none;
+      border-color: #58a6ff;
+      box-shadow: 0 0 6px #58a6ff80;
+    }
+    #add-task-btn {
+      background: #238636;
+      border: none;
+      border-radius: 12px;
+      padding: 12px 20px;
+      font-weight: 700;
+      font-size: 1rem;
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      user-select: none;
+      min-width: 100px;
+    }
+    #add-task-btn:hover,
+    #add-task-btn:focus {
+      background: #2ea043;
+      outline: none;
+    }
+
+    /* Tasks list */
+    #tasks-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      max-height: 480px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    #tasks-list::-webkit-scrollbar {
+      width: 8px;
+    }
+    #tasks-list::-webkit-scrollbar-track {
+      background: #161b22;
+      border-radius: 12px;
+    }
+    #tasks-list::-webkit-scrollbar-thumb {
+      background-color: #58a6ff8f;
+      border-radius: 12px;
+    }
+    .task-item {
+      background: #21262d;
+      border-radius: 12px;
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 1px 3px rgb(10 10 10 / 0.6);
+      transition: background-color 0.3s ease;
+      position: relative;
+    }
+    .task-item:hover,
+    .task-item:focus-within {
+      background-color: #30363d;
+    }
+    .task-item.done .task-text {
+      color: #546178;
+      text-decoration: line-through;
+    }
+    .task-text {
+      flex-grow: 1;
+      margin-left: 12px;
+      font-size: 1rem;
+      word-break: break-word;
+      user-select: text;
+    }
+    /* Checkbox */
+    .task-checkbox {
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+      accent-color: #238636;
+      flex-shrink: 0;
+    }
+    /* Delete button */
+    .delete-task-btn {
+      background: transparent;
+      border: none;
+      color: #f85149;
+      cursor: pointer;
+      margin-left: 16px;
+      font-size: 24px;
+      line-height: 1;
+      user-select: none;
+      transition: color 0.3s ease;
+      flex-shrink: 0;
+    }
+    .delete-task-btn:hover,
+    .delete-task-btn:focus {
+      color: #ff6b6b;
+      outline: none;
+    }
+    .delete-task-btn[aria-label] {
+      position: relative;
+    }
+    /* Responsive scroll */
+    @media (max-width: 640px) {
+      .app-container {
+        padding: 16px 24px 32px;
+      }
+      #tasks-list {
+        max-height: 320px;
+      }
+      header h1 {
+        font-size: 1.5rem;
+      }
+      #new-task-input {
+        font-size: 0.95rem;
+        padding: 10px 14px;
+      }
+      #add-task-btn {
+        font-size: 0.9rem;
+        padding: 10px 14px;
+        min-width: 80px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="app-container" role="main" aria-labelledby="app-title">
+    <header>
+      <h1 id="app-title" tabindex="0">Your To-Do List</h1>
+      <button id="logout-btn" type="button" aria-label="Logout" hidden>
+        <span class="material-icons" aria-hidden="true" style="vertical-align: middle;">logout</span> Logout
+      </button>
+    </header>
+
+    <!-- Authentication Section -->
+    <section id="auth-section" class="auth-section" aria-live="polite">
+      <!-- Signup form -->
+      <form id="signup-form" novalidate>
+        <h2>Sign Up</h2>
+        <label for="signup-email">Email address</label>
+        <input type="email" id="signup-email" name="signup-email" autocomplete="username" required aria-required="true" />
+        <label for="signup-password">Password</label>
+        <input type="password" id="signup-password" name="signup-password" autocomplete="new-password" minLength="6" required aria-required="true" />
+        <button type="submit" aria-label="Sign up with email and password">Create Account</button>
+        <div class="error-message" id="signup-error" role="alert" aria-live="assertive"></div>
+        <p class="auth-toggle">Already have an account? <a href="#" id="show-login">Log in</a></p>
+      </form>
+
+      <!-- Login form -->
+      <form id="login-form" novalidate hidden>
+        <h2>Log In</h2>
+        <label for="login-email">Email address</label>
+        <input type="email" id="login-email" name="login-email" autocomplete="username" required aria-required="true" />
+        <label for="login-password">Password</label>
+        <input type="password" id="login-password" name="login-password" autocomplete="current-password" required aria-required="true" />
+        <button type="submit" aria-label="Log in with email and password">Log In</button>
+        <div class="error-message" id="login-error" role="alert" aria-live="assertive"></div>
+        <p class="auth-toggle">Don't have an account? <a href="#" id="show-signup">Sign up</a></p>
+      </form>
+    </section>
+
+    <!-- Main App UI -->
+    <section id="app-main" aria-live="polite" aria-label="To-do list application main content">
+      <div id="user-info" aria-label="User information">
+        <span id="user-email" tabindex="0"></span>
+      </div>
+
+      <!-- New task input -->
+      <form id="new-task-form" aria-label="Add new task form" autocomplete="off">
+        <input
+          type="text"
+          id="new-task-input"
+          name="new-task"
+          placeholder="What needs to be done?"
+          aria-label="New task description"
+          required
+          minlength="1"
+          maxlength="200"
+          autocomplete="off"
+        />
+        <button id="add-task-btn" type="submit" aria-label="Add task">Add</button>
+      </form>
+
+      <!-- Tasks list -->
+      <ul id="tasks-list" aria-label="Tasks list" role="list">
+        <!-- Tasks inserted here dynamically -->
+      </ul>
+    </section>
+  </main>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js" defer></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js" defer></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js" defer></script>
+
+  <script defer>
+    // Wait for Firebase SDK to load
+    window.addEventListener('load', () => {
+      // Firebase configuration - Replace with your own Firebase project configuration
+      const firebaseConfig = {
+        apiKey: "YOUR_API_KEY_HERE",
+        authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+        projectId: "YOUR_PROJECT_ID",
+        storageBucket: "YOUR_PROJECT_ID.appspot.com",
+        messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+        appId: "YOUR_APP_ID"
+      };
+
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+      const auth = firebase.auth();
+      const db = firebase.firestore();
+
+      // Elements
+      const authSection = document.getElementById('auth-section');
+      const signupForm = document.getElementById('signup-form');
+      const loginForm = document.getElementById('login-form');
+      const showLoginLink = document.getElementById('show-login');
+      const showSignupLink = document.getElementById('show-signup');
+      const signupError = document.getElementById('signup-error');
+      const loginError = document.getElementById('login-error');
+
+      const appMain = document.getElementById('app-main');
+      const userEmailSpan = document.getElementById('user-email');
+      const logoutBtn = document.getElementById('logout-btn');
+
+      const newTaskForm = document.getElementById('new-task-form');
+      const newTaskInput = document.getElementById('new-task-input');
+      const tasksList = document.getElementById('tasks-list');
+
+      // Toggle forms
+      showLoginLink.addEventListener('click', e => {
+        e.preventDefault();
+        signupForm.hidden = true;
+        loginForm.hidden = false;
+        signupError.textContent = '';
+        loginError.textContent = '';
+        newTaskInput.blur();
+        loginForm.querySelector('input[type="email"]').focus();
+      });
+
+      showSignupLink.addEventListener('click', e => {
+        e.preventDefault();
+        signupForm.hidden = false;
+        loginForm.hidden = true;
+        signupError.textContent = '';
+        loginError.textContent = '';
+        newTaskInput.blur();
+        signupForm.querySelector('input[type="email"]').focus();
+      });
+
+      // Show only signup initially
+      signupForm.hidden = false;
+      loginForm.hidden = true;
+
+      // Signup handler
+      signupForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        signupError.textContent = '';
+        const email = signupForm['signup-email'].value.trim();
+        const password = signupForm['signup-password'].value;
+        if (!email || !password) {
+          signupError.textContent = 'Please enter valid email and password.';
+          return;
+        }
+        try {
+          await auth.createUserWithEmailAndPassword(email, password);
+          signupForm.reset();
+        } catch (err) {
+          signupError.textContent = firebaseErrorMessage(err);
+        }
+      });
+
+      // Login handler
+      loginForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        loginError.textContent = '';
+        const email = loginForm['login-email'].value.trim();
+        const password = loginForm['login-password'].value;
+        if (!email || !password) {
+          loginError.textContent = 'Please enter valid email and password.';
+          return;
+        }
+        try {
+          await auth.signInWithEmailAndPassword(email, password);
+          loginForm.reset();
+        } catch (err) {
+          loginError.textContent = firebaseErrorMessage(err);
+        }
+      });
+
+      // Logout handler
+      logoutBtn.addEventListener('click', async () => {
+        try {
+          await auth.signOut();
+        } catch {
+          // Could display error if needed
+        }
+      });
+
+      // Listen for auth state changes
+      auth.onAuthStateChanged(user => {
+        if (user) {
+          // Show app main UI
+          authSection.hidden = true;
+          appMain.style.display = 'flex';
+          logoutBtn.hidden = false;
+          userEmailSpan.textContent = `Signed in as ${user.email}`;
+          subscribeToTasks(user.uid);
+        } else {
+          // Show auth forms
+          authSection.hidden = false;
+          appMain.style.display = 'none';
+          logoutBtn.hidden = true;
+          tasksList.innerHTML = '';
+          unsubscribeTasks();
+          signupForm.hidden = false;
+          loginForm.hidden = true;
+          signupError.textContent = '';
+          loginError.textContent = '';
+          userEmailSpan.textContent = '';
+        }
+      });
+
+      // Firestore task subscription reference
+      let unsubscribe = null;
+
+      // Subscribe to tasks collection for a user, listen in realtime
+      function subscribeToTasks(uid) {
+        if (unsubscribe) unsubscribe();
+        const tasksRef = db.collection('users').doc(uid).collection('tasks').orderBy('createdAt', 'desc');
+        unsubscribe = tasksRef.onSnapshot(snapshot => {
+          renderTasks(snapshot.docs);
+        }, error => {
+          console.error('Task subscription error:', error);
+        });
+      }
+
+      function unsubscribeTasks() {
+        if (unsubscribe) {
+          unsubscribe();
+          unsubscribe = null;
+        }
+      }
+
+      // Render task list in the UI
+      function renderTasks(taskDocs) {
+        tasksList.innerHTML = '';
+        if (taskDocs.length === 0) {
+          const noTasksLi = document.createElement('li');
+          noTasksLi.textContent = 'You have no tasks. Start by adding one!';
+          noTasksLi.style.color = '#8b949e';
+          noTasksLi.style.fontStyle = 'italic';
+          noTasksLi.style.textAlign = 'center';
+          tasksList.appendChild(noTasksLi);
+          return;
+        }
+
+        taskDocs.forEach(doc => {
+          const task = doc.data();
+          const li = document.createElement('li');
+          li.className = 'task-item';
+          if (task.completed) li.classList.add('done');
+          li.setAttribute('tabindex', '0');
+          li.setAttribute('role', 'listitem');
+          li.dataset.taskId = doc.id;
+
+          // Checkbox
+          const checkbox = document.createElement('input');
+          checkbox.type = 'checkbox';
+          checkbox.className = 'task-checkbox';
+          checkbox.checked = !!task.completed;
+          checkbox.setAttribute('aria-label', `Mark task "${task.text}" as completed`);
+          checkbox.addEventListener('change', () => {
+            updateTaskCompletion(doc.id, checkbox.checked);
+          });
+          li.appendChild(checkbox);
+
+          // Task text
+          const span = document.createElement('span');
+          span.className = 'task-text';
+          span.textContent = task.text;
+          li.appendChild(span);
+
+          // Delete button
+          const deleteBtn = document.createElement('button');
+          deleteBtn.className = 'delete-task-btn';
+          deleteBtn.setAttribute('type', 'button');
+          deleteBtn.setAttribute('aria-label', `Delete task "${task.text}"`);
+          deleteBtn.title = 'Delete task';
+          deleteBtn.innerHTML = '<span class="material-icons" aria-hidden="true">delete</span>';
+          deleteBtn.addEventListener('click', () => {
+            deleteTask(doc.id);
+          });
+          li.appendChild(deleteBtn);
+
+          tasksList.appendChild(li);
+        });
+      }
+
+      // Add new task handler
+      newTaskForm.addEventListener('submit', async e => {
+        e.preventDefault();
+        const text = newTaskInput.value.trim();
+        if (!text) return;
+        const user = auth.currentUser;
+        if (!user) return;
+        try {
+          await db.collection('users').doc(user.uid).collection('tasks').add({
+            text,
+            completed: false,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+          });
+          newTaskInput.value = '';
+        } catch (err) {
+          console.error('Error adding task:', err);
+        }
+      });
+
+      // Update task completion status
+      async function updateTaskCompletion(taskId, completed) {
+        const user = auth.currentUser;
+        if (!user) return;
+        try {
+          await db.collection('users').doc(user.uid).collection('tasks').doc(taskId).update({
+            completed
+          });
+        } catch (e) {
+          console.error('Error updating task:', e);
+        }
+      }
+
+      // Delete a task
+      async function deleteTask(taskId) {
+        const user = auth.currentUser;
+        if (!user) return;
+        try {
+          await db.collection('users').doc(user.uid).collection('tasks').doc(taskId).delete();
+        } catch (e) {
+          console.error('Error deleting task:', e);
+        }
+      }
+
+      // Map Firebase error codes to messages
+      function firebaseErrorMessage(err) {
+        if (!err || !err.code) return 'An error occurred, please try again.';
+        switch (err.code) {
+          case 'auth/email-already-in-use':
+            return 'This email address is already in use.';
+          case 'auth/invalid-email':
+            return 'Invalid email address.';
+          case 'auth/operation-not-allowed':
+            return 'Operation not allowed, contact admin.';
+          case 'auth/weak-password':
+            return 'Password is too weak, minimum 6 characters.';
+          case 'auth/user-disabled':
+            return 'This user has been disabled.';
+          case 'auth/user-not-found':
+          case 'auth/wrong-password':
+            return 'Incorrect email or password.';
+          case 'auth/too-many-requests':
+            return 'Too many attempts, please try later.';
+          default:
+            return err.message || 'Authentication error.';
+        }
+      }
+    });
+  </script>
+</body>
+</html>
+
