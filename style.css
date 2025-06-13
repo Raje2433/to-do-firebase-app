@@ -1,0 +1,426 @@
+/* Import Inter font if needed - already linked in HTML */
+
+/* RESET */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  background: #121212;
+  color: #e0e0e0;
+  line-height: 1.6;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Container */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 16px 16px 32px;
+}
+
+/* HEADER */
+.app-header {
+  padding: 24px 0 32px;
+  text-align: center;
+  border-bottom: 1px solid #333;
+  user-select: none;
+  background: rgba(18,18,18,0.95);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.app-logo {
+  font-weight: 800;
+  font-size: 1.75rem;
+  color: #81d8f7; /* light blue accent */
+  letter-spacing: 1.3px;
+  margin: 0;
+}
+
+/* AUTH CONTAINER */
+.auth-container {
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+  padding-bottom: 32px;
+}
+
+/* Sections for login/signup */
+.auth-section {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 32px 24px;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  max-width: 100%;
+}
+
+/* Hide by default */
+.hidden {
+  display: none !important;
+}
+
+/* Form headings */
+.auth-section > h2 {
+  font-weight: 700;
+  font-size: 1.5rem;
+  color: #81d8f7;
+  margin-bottom: 0;
+  user-select: none;
+  text-align: center;
+}
+
+/* Form description paragraph */
+.form-desc {
+  color: #9e9e9e;
+  font-weight: 400;
+  font-size: 0.9rem;
+  margin-top: -4px;
+  margin-bottom: 24px;
+  text-align: center;
+  user-select: none;
+}
+
+/* Labels */
+.form-label {
+  display: block;
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #b0b0b0;
+}
+
+/* Inputs */
+.form-input {
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: 1.8px solid #444;
+  background: #222;
+  color: #e0e0e0;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+  outline-offset: 2px;
+}
+
+.form-input:focus {
+  border-color: #81d8f7;
+  box-shadow: 0 0 8px #81d8f7cc;
+}
+
+/* Buttons */
+.btn-primary {
+  background: linear-gradient(135deg, #81d8f7, #5ac8fa);
+  border: none;
+  border-radius: 16px;
+  padding: 14px 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #121212;
+  cursor: pointer;
+  user-select: none;
+  box-shadow: 0 6px 12px rgb(129 216 247 / 0.3);
+  transition:
+    box-shadow 0.3s ease,
+    transform 0.25s ease,
+    background 0.3s ease;
+  width: 100%;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-primary:hover,
+.btn-primary:focus-visible {
+  background: linear-gradient(135deg, #5ac8fa, #33b0f3);
+  box-shadow: 0 10px 22px rgb(90 200 250 / 0.6);
+  transform: translateY(-2px);
+  outline: none;
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 12px rgb(90 200 250 / 0.5);
+}
+
+/* Small modifier for buttons */
+.btn-small {
+  padding: 10px 14px;
+  font-size: 0.95rem;
+  border-radius: 12px;
+  width: auto;
+  min-width: 44px;
+  aspect-ratio: 1/1;
+  justify-content: center;
+}
+
+/* Full width modifier */
+.btn-fullwidth {
+  width: 100%;
+}
+
+/* Ghost style button for logout */
+.btn-ghost {
+  background: transparent;
+  border: 2px solid #81d8f7;
+  color: #81d8f7;
+  border-radius: 14px;
+  padding: 8px 14px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  user-select: none;
+  cursor: pointer;
+  transition:
+    background-color 0.25s ease,
+    color 0.25s ease;
+}
+
+.btn-ghost:hover,
+.btn-ghost:focus-visible {
+  background-color: #81d8f7;
+  color: #121212;
+  outline: none;
+}
+
+.btn-link {
+  background: none;
+  border: none;
+  color: #81d8f7;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-decoration: underline;
+  user-select: none;
+  padding: 0;
+}
+
+.btn-link:hover,
+.btn-link:focus-visible {
+  color: #5ac8fa;
+  outline: none;
+  text-decoration: none;
+}
+
+/* Form toggle paragraph */
+.form-toggle-text {
+  font-size: 0.9rem;
+  text-align: center;
+  color: #999;
+}
+
+/* DASHBOARD */
+/* Dashboard container styling */
+.dashboard-container {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  padding-bottom: 32px;
+}
+
+/* User info */
+.user-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(18,18,18,0.9);
+  padding: 12px 20px;
+  border-radius: 16px;
+  gap: 16px;
+  user-select: none;
+}
+
+.user-icon {
+  font-size: 38px;
+  color: #81d8f7;
+}
+
+.user-email {
+  flex-grow: 1;
+  font-weight: 600;
+  font-size: 1rem;
+  color: #ffffff;
+  overflow-wrap: break-word;
+}
+
+/* Task input section */
+.task-input-section {
+  display: flex;
+  background: rgba(18,18,18,0.9);
+  border-radius: 16px;
+  padding: 8px 16px;
+}
+
+.task-form {
+  display: flex;
+  flex-grow: 1;
+  gap: 12px;
+  width: 100%;
+}
+
+.task-input {
+  flex-grow: 1;
+  font-size: 1rem;
+  background: transparent;
+  border: none;
+  color: #e0e0e0;
+  padding: 12px 8px;
+  border-radius: 12px;
+  outline-offset: 2px;
+  box-shadow: inset 0 0 6px rgba(255 255 255 / 0.1);
+  transition: box-shadow 0.3s ease;
+}
+
+.task-input::placeholder {
+  color: #777;
+}
+
+.task-input:focus {
+  box-shadow: inset 0 0 8px #81d8f7aa;
+  outline: none;
+}
+
+/* Task list */
+.task-list-section {
+  max-height: 50vh;
+  overflow-y: auto;
+  padding: 8px 0;
+}
+
+.task-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* Each task */
+.task-list li {
+  background: rgba(255 255 255 / 0.05);
+  border-radius: 14px;
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  user-select: none;
+  box-shadow: 0 2px 6px rgba(0 0 0 / 0.28);
+  transition: background-color 0.3s ease;
+}
+
+.task-list li:hover,
+.task-list li:focus-within {
+  background: rgba(129,216,247,0.13);
+}
+
+/* Task text */
+.task-text {
+  font-size: 1rem;
+  color: #e3e3e3;
+  word-break: break-word;
+  flex-grow: 1;
+  margin-right: 16px;
+}
+
+/* Delete button */
+.task-delete-btn {
+  background: transparent;
+  border: none;
+  color: #ef4444;
+  cursor: pointer;
+  font-size: 22px;
+  padding: 4px;
+  border-radius: 12px;
+  transition: background-color 0.2s ease;
+  display: flex;
+  align-items: center;
+}
+
+.task-delete-btn:hover,
+.task-delete-btn:focus-visible {
+  background-color: #ef444430;
+  outline: none;
+}
+
+/* Material Icons inside buttons */
+.material-icons {
+  font-variation-settings:
+    'wght' 400;
+  user-select: none;
+}
+
+/* Scrollbar styling for task list */
+.task-list-section::-webkit-scrollbar {
+  width: 8px;
+}
+
+.task-list-section::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.task-list-section::-webkit-scrollbar-thumb {
+  background-color: rgba(129,216,247,0.3);
+  border-radius: 6px;
+}
+
+.task-list-section::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(129,216,247,0.5);
+}
+
+/* Responsive */
+
+/* Mobile (≤640px) */
+@media (max-width: 640px) {
+  .app-container {
+    max-width: 100%;
+    padding: 16px 16px 48px;
+  }
+
+  .app-header {
+    padding: 20px 0 28px;
+  }
+
+  /* Auth container stacked with larger gap */
+  .auth-container {
+    gap: 40px;
+  }
+}
+
+/* Tablet (641px - 1024px) */
+@media (min-width: 641px) and (max-width: 1024px) {
+  .app-container {
+    max-width: 480px;
+  }
+}
+
+/* Desktop (1025px+) */
+@media (min-width: 1025px) {
+  .app-container {
+    max-width: 480px;
+  }
+}
+
+
+/* Accessibility */
+/* Focus outline for keyboard users */
+:focus-visible {
+  outline: 3px solid #5ac8fa;
+  outline-offset: 2px;
+}
+
