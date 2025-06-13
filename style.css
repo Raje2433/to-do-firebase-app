@@ -41,14 +41,12 @@ body {
 }
 
 .app-logo {
-  font-family: 'Dancing Script', cursive;
   font-weight: 700;
   font-size: 3.5rem;
   color: #81d8f7;
   letter-spacing: 1px;
   margin: 0;
 }
-
 
 /* AUTH CONTAINER */
 .auth-container {
@@ -78,9 +76,9 @@ body {
 /* Form headings */
 .auth-section > h2 {
   font-weight: 700;
-  font-size: 1.5rem;
+  font-size: 2.5rem; /* Increased size */
   color: #81d8f7;
-  margin-bottom: 0;
+  margin-bottom: 12px; /* Added margin */
   user-select: none;
   text-align: center;
 }
@@ -89,7 +87,7 @@ body {
 .form-desc {
   color: #9e9e9e;
   font-weight: 400;
-  font-size: 0.9rem;
+  font-size: 1.2rem; /* Increased size for readability */
   margin-top: -4px;
   margin-bottom: 24px;
   text-align: center;
