@@ -1,5 +1,21 @@
 // Strict mode for better error checking
 "use strict";
+// Add this at the top of your JavaScript file
+const googleSignInBtn = document.getElementById("google-signin-btn");
+
+// Google sign-in handler
+googleSignInBtn.addEventListener("click", async () => {
+  const provider = new firebase.auth.GoogleAuthProvider();
+  
+  try {
+    const result = await auth.signInWithPopup(provider);
+    // The signed-in user info
+    const user = result.user;
+    console.log("User  signed in: ", user);
+  } catch (error) {
+    alert("Google sign-in failed: " + error.message);
+  }
+});
 
 // DOM Elements
 const loginSection = document.getElementById("login-section");
