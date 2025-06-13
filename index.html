@@ -33,6 +33,11 @@
           <label for="login-password" class="form-label">Password</label>
           <input type="password" id="login-password" name="login-password" class="form-input" placeholder="••••••••" autocomplete="current-password" required aria-required="true" />
           
+          <!-- Forgot password link -->
+          <div class="forgot-password-container" style="text-align: right; margin-top: 6px; margin-bottom: 12px;">
+            <button type="button" id="forgot-password-btn" class="btn-link" aria-label="Forgot password?">Forgot Password?</button>
+          </div>
+          
           <button type="submit" class="btn-primary btn-fullwidth" aria-label="Log in to your account">Log In</button>
         </form>
 
@@ -76,7 +81,7 @@
     </main>
 
     <!-- Dashboard Section -->
-    <main id="dashboard-section" class="dashboard-container hidden" aria-label="User dashboard for task management">
+    <main id="dashboard-section" class="dashboard-container hidden" aria-label="User  dashboard for task management">
       <section class="user-info">
         <span class="material-icons user-icon" aria-hidden="true">account_circle</span>
         <span id="user-email" class="user-email" aria-live="polite">user@example.com</span>
@@ -124,5 +129,22 @@
   <script src="firebase-config.js"></script>
   <!-- App JS -->
   <script src="app.js" defer></script>
+
+  <script>
+    // JavaScript for handling the forgot password functionality
+    document.getElementById('forgot-password-btn').addEventListener('click', async () => {
+      const email = document.getElementById('login-email').value.trim();
+      if (!email) {
+        alert('Please enter your email address above to reset your password.');
+        return;
+      }
+      try {
+        await auth.sendPasswordResetEmail(email);
+        alert('Password reset email sent! Please check your inbox.');
+      } catch (error) {
+        alert('Error sending password reset email: ' + error.message);
+      }
+    });
+  </script>
 </body>
 </html>
